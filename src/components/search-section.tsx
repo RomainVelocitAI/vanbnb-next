@@ -172,7 +172,7 @@ export function SearchSection({ onSearch }: { onSearch?: (params: any) => void }
                       <SelectValue placeholder="Tous" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">Tous les types</SelectItem>
+                      <SelectItem value="all">Tous les types</SelectItem>
                       <SelectItem value="van">Van aménagé</SelectItem>
                       <SelectItem value="camping_car">Camping-car</SelectItem>
                       <SelectItem value="fourgon">Fourgon</SelectItem>
@@ -191,7 +191,7 @@ export function SearchSection({ onSearch }: { onSearch?: (params: any) => void }
                       <SelectValue placeholder="2+" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">Toutes</SelectItem>
+                      <SelectItem value="all">Toutes</SelectItem>
                       <SelectItem value="2">2+</SelectItem>
                       <SelectItem value="4">4+</SelectItem>
                       <SelectItem value="6">6+</SelectItem>
