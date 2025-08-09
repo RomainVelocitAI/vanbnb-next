@@ -203,11 +203,13 @@ export function Navigation() {
               </Button>
 
               {/* CTA Button */}
-              <Button 
-                className="ml-2 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-300"
-              >
-                Devenir partenaire
-              </Button>
+              <Link href="/partners">
+                <Button 
+                  className="ml-2 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  Devenir partenaire
+                </Button>
+              </Link>
             </div>
 
             {/* Mobile Menu Button */}
@@ -295,11 +297,13 @@ export function Navigation() {
                     <User className="w-5 h-5" />
                     Se connecter
                   </Button>
-                  <Button 
-                    className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white"
-                  >
-                    Devenir partenaire
-                  </Button>
+                  <Link href="/partners" className="block">
+                    <Button 
+                      className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white"
+                    >
+                      Devenir partenaire
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </motion.div>
