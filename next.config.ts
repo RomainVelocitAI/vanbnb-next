@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'images.unsplash.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+      },
     ],
     formats: ['image/avif', 'image/webp'],
   },
@@ -51,7 +55,7 @@ const nextConfig: NextConfig = {
               default-src 'self';
               script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live https://*.supabase.co;
               style-src 'self' 'unsafe-inline';
-              img-src 'self' blob: data: https://*.supabase.co https://images.unsplash.com;
+              img-src 'self' blob: data: https://*.supabase.co https://images.unsplash.com https://placehold.co;
               font-src 'self' data:;
               object-src 'none';
               base-uri 'self';

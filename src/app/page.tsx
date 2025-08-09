@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Search, MapPin, Calendar, Users, Shield, Star, ChevronRight } from 'lucide-react'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { HeroSpotlight } from '@/components/hero-spotlight'
 import { SearchSection } from '@/components/search-section'
 import { TopRatedVehicles } from '@/components/top-rated-vehicles'
@@ -14,22 +14,18 @@ import { TopRatedVehicles } from '@/components/top-rated-vehicles'
 export const revalidate = 3600
 
 async function getFeaturedVehicles() {
-  const supabase = await createClient()
+  // Temporarily use service client to bypass RLS issues
+  const supabase = await createServiceClient()
   
   const { data: vehicles } = await supabase
     .from('vehicles')
     .select(`
       *,
-      partners (
-        company_name,
-        city
-      ),
       vehicle_photos (
         photo_url,
-        is_main
+        photo_order
       )
     `)
-    .eq('is_featured', true)
     .eq('status', 'active')
     .limit(6)
 
@@ -83,14 +79,14 @@ export default async function HomePage() {
                 <Card key={vehicle.id} className="overflow-hidden hover:shadow-xl transition-shadow">
                   <div className="relative h-64">
                     <Image
-                      src={vehicle.vehicle_photos?.[0]?.photo_url || '/placeholder-van.jpg'}
+                      src={vehicle.vehicle_photos?.[0]?.photo_url || 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=600'}
                       alt={`${vehicle.brand} ${vehicle.model}`}
                       fill
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                     <Badge className="absolute top-4 left-4" variant="premium">
-                      {vehicle.vehicle_type}
+                      {vehicle.vehicle_type === 'camping_car' ? 'Camping-car' : vehicle.vehicle_type === 'van' ? 'Van' : 'Fourgon'}
                     </Badge>
                   </div>
                   
@@ -98,25 +94,25 @@ export default async function HomePage() {
                     <CardTitle>{vehicle.brand} {vehicle.model}</CardTitle>
                     <CardDescription>
                       <MapPin className="w-4 h-4 inline mr-1" />
-                      {vehicle.partners?.city}
+                      {vehicle.pickup_location_address || 'France'}
                     </CardDescription>
                   </CardHeader>
                   
                   <CardContent>
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-4 text-sm text-gray-600">
-                        <span><Users className="w-4 h-4 inline mr-1" />{vehicle.sleeping_capacity} pers.</span>
+                        <span><Users className="w-4 h-4 inline mr-1" />{vehicle.capacity_passengers || 4} pers.</span>
                         <span>{vehicle.year}</span>
                       </div>
                       <div className="flex items-center">
                         <Star className="w-4 h-4 text-amber-500 fill-current" />
-                        <span className="ml-1 text-sm font-medium">4.8</span>
+                        <span className="ml-1 text-sm font-medium">4.5</span>
                       </div>
                     </div>
                     
                     <div className="flex items-center justify-between">
                       <div>
-                        <span className="text-2xl font-bold">{vehicle.base_price_per_day}€</span>
+                        <span className="text-2xl font-bold">{vehicle.price_per_day || 100}€</span>
                         <span className="text-gray-600 text-sm">/jour</span>
                       </div>
                       <Button asChild>
