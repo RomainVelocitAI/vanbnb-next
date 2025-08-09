@@ -7,6 +7,8 @@ import { Badge } from '@/components/ui/badge'
 import { Search, MapPin, Calendar, Users, Shield, Star, ChevronRight } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { HeroSpotlight } from '@/components/hero-spotlight'
+import { SearchSection } from '@/components/search-section'
+import { TopRatedVehicles } from '@/components/top-rated-vehicles'
 
 // ISR - Revalidate every hour
 export const revalidate = 3600
@@ -60,6 +62,12 @@ export default async function HomePage() {
     <>
       {/* Premium Hero Section with Animated Vehicles */}
       <HeroSpotlight />
+
+      {/* Search Section */}
+      <SearchSection />
+
+      {/* Top Rated Vehicles with Auto-Rotation */}
+      <TopRatedVehicles />
 
       {/* Featured Vehicles */}
       <section className="py-24 bg-gray-50">
