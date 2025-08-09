@@ -39,7 +39,7 @@ export interface VehiclePhoto {
   vehicle_id: string
   photo_url: string
   is_primary: boolean
-  caption?: string
+  alt_text?: string
 }
 
 export interface Review {
@@ -68,7 +68,7 @@ export async function getTopRatedVehicles(limit: number = 10) {
       vehicle_photos(
         photo_url,
         is_primary,
-        caption
+        alt_text
       ),
       reviews(
         rating_overall
@@ -125,7 +125,7 @@ export async function searchVehicles(params: {
       vehicle_photos(
         photo_url,
         is_primary,
-        caption
+        alt_text
       ),
       reviews(
         rating_overall
