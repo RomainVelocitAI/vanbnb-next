@@ -39,7 +39,22 @@ export function SearchSection({ onSearch }: { onSearch?: (params: any) => void }
       vehicleType,
       capacity: capacity ? parseInt(capacity) : undefined,
     }
-    onSearch?.(params)
+    
+    // If onSearch is provided, use it, otherwise navigate to vehicles page
+    if (onSearch) {
+      onSearch(params)
+    } else {
+      // Build query string
+      const queryParams = new URLSearchParams()
+      if (location) queryParams.append('location', location)
+      if (startDate) queryParams.append('startDate', startDate.toISOString())
+      if (endDate) queryParams.append('endDate', endDate.toISOString())
+      if (vehicleType && vehicleType !== 'all') queryParams.append('type', vehicleType)
+      if (capacity && capacity !== 'all') queryParams.append('capacity', capacity)
+      
+      // Navigate to vehicles page with search params
+      window.location.href = `/vehicles?${queryParams.toString()}`
+    }
   }
 
   return (
