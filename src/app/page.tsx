@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Search, MapPin, Calendar, Users, Shield, Star, ChevronRight } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import { HeroSpotlight } from '@/components/hero-spotlight'
 
 // ISR - Revalidate every hour
 export const revalidate = 3600
@@ -57,80 +58,8 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-amber-50">
-        <div className="absolute inset-0 bg-grid-gray-100/50 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
-        
-        <div className="container relative z-10 mx-auto px-4 py-24">
-          <div className="text-center max-w-4xl mx-auto">
-            <Badge variant="premium" className="mb-4">
-              Plateforme N°1 en France
-            </Badge>
-            
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-              Louez le véhicule de vos rêves pour l'aventure
-            </h1>
-            
-            <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
-              Vans aménagés, camping-cars et véhicules de loisirs. 
-              Réservez auprès de professionnels vérifiés partout en France.
-            </p>
-
-            {/* Search Bar */}
-            <div className="bg-white rounded-2xl shadow-2xl p-4 max-w-3xl mx-auto">
-              <div className="grid md:grid-cols-4 gap-4">
-                <div className="flex items-center gap-2 px-4 py-3 bg-gray-50 rounded-lg">
-                  <MapPin className="w-5 h-5 text-gray-400" />
-                  <input 
-                    type="text" 
-                    placeholder="Où ?" 
-                    className="bg-transparent outline-none w-full"
-                  />
-                </div>
-                
-                <div className="flex items-center gap-2 px-4 py-3 bg-gray-50 rounded-lg">
-                  <Calendar className="w-5 h-5 text-gray-400" />
-                  <input 
-                    type="date" 
-                    placeholder="Départ" 
-                    className="bg-transparent outline-none w-full"
-                  />
-                </div>
-                
-                <div className="flex items-center gap-2 px-4 py-3 bg-gray-50 rounded-lg">
-                  <Calendar className="w-5 h-5 text-gray-400" />
-                  <input 
-                    type="date" 
-                    placeholder="Retour" 
-                    className="bg-transparent outline-none w-full"
-                  />
-                </div>
-                
-                <Button size="lg" variant="premium" className="w-full">
-                  <Search className="w-5 h-5 mr-2" />
-                  Rechercher
-                </Button>
-              </div>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-8 mt-16 max-w-2xl mx-auto">
-              <div>
-                <div className="text-3xl font-bold text-gray-900">{stats.vehicles}+</div>
-                <div className="text-sm text-gray-600">Véhicules disponibles</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-gray-900">{stats.partners}+</div>
-                <div className="text-sm text-gray-600">Partenaires vérifiés</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-gray-900">{stats.bookings}+</div>
-                <div className="text-sm text-gray-600">Voyageurs satisfaits</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Premium Hero Section with Animated Vehicles */}
+      <HeroSpotlight />
 
       {/* Featured Vehicles */}
       <section className="py-24 bg-gray-50">
