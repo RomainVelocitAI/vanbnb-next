@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Building2, Check, Shield, TrendingUp, Users, Calendar, CreditCard, HeadphonesIcon, ChevronRight } from "lucide-react"
+import { Building2, Check, Shield, TrendingUp, Users, Calendar, CreditCard, HeadphonesIcon, ChevronRight, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
@@ -120,12 +120,15 @@ export default function PartnersPage() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg"
-                className="bg-white text-blue-900 hover:bg-gray-100"
-              >
-                Commencer maintenant
-              </Button>
+              <Link href="/auth">
+                <Button 
+                  size="lg"
+                  className="bg-white text-blue-900 hover:bg-gray-100"
+                >
+                  Commencer maintenant
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
               <Button 
                 size="lg"
                 variant="outline"
@@ -313,12 +316,15 @@ export default function PartnersPage() {
               Inscription gratuite et sans engagement
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg"
-                className="bg-white text-blue-600 hover:bg-gray-100"
-              >
-                Devenir partenaire
-              </Button>
+              <Link href="/auth">
+                <Button 
+                  size="lg"
+                  className="bg-white text-blue-600 hover:bg-gray-100"
+                >
+                  Devenir partenaire
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
               <Button 
                 size="lg"
                 variant="outline"
