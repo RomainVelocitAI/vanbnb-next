@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
 import { motion } from "framer-motion"
 import { Filter, MapPin, Calendar, Users, Star, Heart, Fuel, Settings, Wifi, Coffee, Bed } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -36,14 +37,36 @@ const vehicleFeatures = {
 }
 
 export default function VehiclesPage() {
+  const searchParams = useSearchParams()
   const [vehicles, setVehicles] = useState<Vehicle[]>([])
   const [loading, setLoading] = useState(true)
   const [filters, setFilters] = useState({
     type: "all",
     priceSort: "asc",
-    location: ""
+    location: "",
+    startDate: "",
+    endDate: "",
+    capacity: ""
   })
   const [favorites, setFavorites] = useState<string[]>([])
+
+  // Initialize filters from URL parameters on mount
+  useEffect(() => {
+    const locationParam = searchParams.get('location')
+    const typeParam = searchParams.get('type')
+    const capacityParam = searchParams.get('capacity')
+    const startDateParam = searchParams.get('startDate')
+    const endDateParam = searchParams.get('endDate')
+    
+    setFilters(prev => ({
+      ...prev,
+      location: locationParam || "",
+      type: typeParam || "all",
+      capacity: capacityParam || "",
+      startDate: startDateParam || "",
+      endDate: endDateParam || ""
+    }))
+  }, [searchParams])
 
   useEffect(() => {
     fetchVehicles()
@@ -68,14 +91,26 @@ export default function VehiclesPage() {
         `)
         .eq('status', 'active')
 
-      if (filters.type !== "all") {
+      // Apply type filter
+      if (filters.type !== "all" && filters.type) {
         query = query.eq('vehicle_type', filters.type)
       }
 
+      // Apply location filter
       if (filters.location) {
         query = query.ilike('pickup_location_address', `%${filters.location}%`)
       }
 
+      // Apply capacity filter
+      if (filters.capacity && filters.capacity !== "all") {
+        const minCapacity = parseInt(filters.capacity)
+        query = query.gte('capacity_passengers', minCapacity)
+      }
+
+      // Apply date filters if needed (for availability check in the future)
+      // For now, we'll just note the dates are available in filters.startDate and filters.endDate
+      
+      // Apply price sorting
       if (filters.priceSort === "asc") {
         query = query.order('price_per_day', { ascending: true })
       } else {
