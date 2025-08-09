@@ -113,3 +113,4 @@ Les contributions sont les bienvenues ! Merci de lire CONTRIBUTING.md
 ## 📄 License
 
 Propriétaire - VanBNB © 2025
+# Trigger Vercel deployment
