@@ -55,7 +55,7 @@ const nextConfig: NextConfig = {
               default-src 'self';
               script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live https://*.supabase.co;
               style-src 'self' 'unsafe-inline';
-              img-src 'self' blob: data: https://*.supabase.co https://images.unsplash.com https://placehold.co;
+              img-src 'self' blob: data: https: http:;
               font-src 'self' data:;
               object-src 'none';
               base-uri 'self';
