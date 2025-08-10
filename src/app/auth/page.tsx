@@ -17,6 +17,7 @@ export default function AuthPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
   
   // Form states
   const [loginData, setLoginData] = useState({
@@ -93,19 +94,38 @@ export default function AuthPage() {
 
       if (authError) throw authError
 
-      // After signup, sign in the user to establish the session
+      // After signup, check if email confirmation is required
       if (authData.user) {
+        // Try to sign in to check if email confirmation is needed
         const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
           email: signupData.email,
           password: signupData.password
         })
 
-        if (signInError) {
+        if (signInError && signInError.message === 'Email not confirmed') {
+          // Email confirmation required - show success message
+          setSuccessMessage("🎉 Compte créé avec succès ! Veuillez vérifier votre boîte mail pour confirmer votre adresse email.")
+          setError(null)
+          // Reset form
+          setSignupData({
+            email: "",
+            password: "",
+            confirmPassword: "",
+            companyName: "",
+            fullName: "",
+            phone: "",
+            addressStreet: "",
+            addressCity: "",
+            addressPostalCode: "",
+            addressCountry: "France"
+          })
+          return
+        } else if (signInError) {
           console.error('Sign in error after signup:', signInError)
           throw signInError
         }
 
-        // Now create partner profile with authenticated session
+        // If sign in successful, create partner profile
         const { error: profileError } = await supabase
           .from('partners')
           .insert({
@@ -135,9 +155,10 @@ export default function AuthPage() {
           console.error('Partner profile creation error:', profileError)
           throw profileError
         }
-      }
 
-      router.push("/dashboard")
+        // If everything successful and no email confirmation needed, redirect
+        router.push("/dashboard")
+      }
     } catch (error: any) {
       console.error('Signup error:', error)
       setError(error.message || "Une erreur s'est produite lors de l'inscription")
@@ -268,6 +289,11 @@ export default function AuthPage() {
                   {error && (
                     <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm">
                       {error}
+                    </div>
+                  )}
+                  {successMessage && (
+                    <div className="p-3 bg-green-50 text-green-600 rounded-lg text-sm border border-green-200">
+                      {successMessage}
                     </div>
                   )}
                   
