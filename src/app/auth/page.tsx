@@ -31,7 +31,10 @@ export default function AuthPage() {
     companyName: "",
     fullName: "",
     phone: "",
-    address: ""
+    addressStreet: "",
+    addressCity: "",
+    addressPostalCode: "",
+    addressCountry: "France"
   })
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -79,7 +82,10 @@ export default function AuthPage() {
             full_name: signupData.fullName,
             company_name: signupData.companyName,
             phone: signupData.phone,
-            address: signupData.address,
+            address_street: signupData.addressStreet,
+            address_city: signupData.addressCity,
+            address_postal_code: signupData.addressPostalCode,
+            address_country: signupData.addressCountry,
             role: 'partner'
           }
         }
@@ -96,12 +102,21 @@ export default function AuthPage() {
             email: signupData.email,
             company_name: signupData.companyName,
             full_name: signupData.fullName,
-            phone: signupData.phone,
-            address: signupData.address,
+            phone_primary: signupData.phone,
+            // Combine address fields into a single JSON field
+            address: {
+              street: signupData.addressStreet,
+              city: signupData.addressCity,
+              postal_code: signupData.addressPostalCode,
+              country: signupData.addressCountry
+            },
             status: 'pending_verification'
           })
 
-        if (profileError) throw profileError
+        if (profileError) {
+          console.error('Partner profile creation error:', profileError)
+          throw profileError
+        }
       }
 
       router.push("/dashboard")
@@ -303,17 +318,55 @@ export default function AuthPage() {
                     </div>
                   </div>
                   
-                  <div className="space-y-2">
-                    <Label htmlFor="address">Adresse</Label>
-                    <div className="relative">
-                      <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="addressStreet">Rue</Label>
+                      <div className="relative">
+                        <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                        <Input
+                          id="addressStreet"
+                          type="text"
+                          placeholder="123 Rue de la République"
+                          className="pl-9"
+                          value={signupData.addressStreet}
+                          onChange={(e) => setSignupData({...signupData, addressStreet: e.target.value})}
+                          required
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="addressCity">Ville</Label>
                       <Input
-                        id="address"
+                        id="addressCity"
                         type="text"
-                        placeholder="123 Rue de la République, 75001 Paris"
-                        className="pl-9"
-                        value={signupData.address}
-                        onChange={(e) => setSignupData({...signupData, address: e.target.value})}
+                        placeholder="Paris"
+                        value={signupData.addressCity}
+                        onChange={(e) => setSignupData({...signupData, addressCity: e.target.value})}
+                        required
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="addressPostalCode">Code postal</Label>
+                      <Input
+                        id="addressPostalCode"
+                        type="text"
+                        placeholder="75001"
+                        value={signupData.addressPostalCode}
+                        onChange={(e) => setSignupData({...signupData, addressPostalCode: e.target.value})}
+                        required
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="addressCountry">Pays</Label>
+                      <Input
+                        id="addressCountry"
+                        type="text"
+                        placeholder="France"
+                        value={signupData.addressCountry}
+                        onChange={(e) => setSignupData({...signupData, addressCountry: e.target.value})}
                         required
                       />
                     </div>
