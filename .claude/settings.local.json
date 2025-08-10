@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git pull:*)",
+      "Bash(git fetch:*)",
+      "mcp__github__get_file_contents",
+      "mcp__sequential-thinking__sequentialthinking",
+      "Bash(kill:*)",
+      "Bash(npm run dev:*)",
+      "mcp__playwright__playwright_navigate",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "mcp__supabase__execute_sql",
+      "mcp__supabase__apply_migration",
+      "mcp__playwright__playwright_screenshot",
+      "mcp__vercel__vercel-list-all-deployments",
+      "Bash(curl:*)",
+      "Bash(npx supabase db dump:*)",
+      "Bash(mkdir:*)",
+      "Bash(touch:*)",
+      "mcp__playwright__playwright_click",
+      "mcp__playwright__playwright_get_visible_text",
+      "mcp__playwright__playwright_fill",
+      "mcp__playwright__playwright_evaluate",
+      "mcp__playwright__playwright_console_logs",
+      "mcp__playwright__playwright_close",
+      "Bash(npx supabase:*)",
+      "mcp__supabase__list_projects",
+      "mcp__supabase__list_tables",
+      "Bash(vercel:*)",
+      "mcp__supabase__get_project",
+      "mcp__supabase__get_logs",
+      "mcp__supabase__get_project_url"
+    ],
+    "deny": []
+  }
+}
