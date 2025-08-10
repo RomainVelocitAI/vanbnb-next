@@ -117,7 +117,7 @@ export default function AuthPage() {
               country: signupData.addressCountry
             },
             siret: 'PENDING', // Temporaire, sera mis à jour plus tard
-            status: 'pending_verification'
+            status: 'pending'
           })
 
         if (profileError) {
