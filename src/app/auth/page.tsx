@@ -93,8 +93,19 @@ export default function AuthPage() {
 
       if (authError) throw authError
 
-      // Create partner profile
+      // After signup, sign in the user to establish the session
       if (authData.user) {
+        const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+          email: signupData.email,
+          password: signupData.password
+        })
+
+        if (signInError) {
+          console.error('Sign in error after signup:', signInError)
+          throw signInError
+        }
+
+        // Now create partner profile with authenticated session
         const { error: profileError } = await supabase
           .from('partners')
           .insert({
@@ -128,6 +139,7 @@ export default function AuthPage() {
 
       router.push("/dashboard")
     } catch (error: any) {
+      console.error('Signup error:', error)
       setError(error.message || "Une erreur s'est produite lors de l'inscription")
     } finally {
       setLoading(false)
