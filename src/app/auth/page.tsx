@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -8,16 +8,24 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { createClient } from "@/lib/supabase/client"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Eye, EyeOff, Mail, Lock, User, Building2, Phone, MapPin, Loader2 } from "lucide-react"
 import Link from "next/link"
 
 export default function AuthPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  
+  // Check if email was just confirmed
+  useEffect(() => {
+    if (searchParams.get('confirmed') === 'true') {
+      setSuccessMessage("✅ Email confirmé avec succès ! Vous pouvez maintenant vous connecter.")
+    }
+  }, [searchParams])
   
   // Form states
   const [loginData, setLoginData] = useState({
@@ -45,8 +53,13 @@ export default function AuthPage() {
 
     try {
       const supabase = createClient()
+      
+      // Trim email to remove any spaces
+      const trimmedEmail = loginData.email.trim().toLowerCase()
+      console.log('Attempting login with email:', trimmedEmail)
+      
       const { data, error } = await supabase.auth.signInWithPassword({
-        email: loginData.email,
+        email: trimmedEmail,
         password: loginData.password
       })
 
@@ -54,6 +67,7 @@ export default function AuthPage() {
 
       router.push("/dashboard")
     } catch (error: any) {
+      console.error('Login error:', error)
       setError(error.message || "Une erreur s'est produite lors de la connexion")
     } finally {
       setLoading(false)
@@ -74,9 +88,13 @@ export default function AuthPage() {
     try {
       const supabase = createClient()
       
+      // Trim and normalize email
+      const normalizedEmail = signupData.email.trim().toLowerCase()
+      console.log('Signing up with email:', normalizedEmail)
+      
       // Create auth user
       const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: signupData.email,
+        email: normalizedEmail,
         password: signupData.password,
         options: {
           data: {
@@ -98,7 +116,7 @@ export default function AuthPage() {
       if (authData.user) {
         // Try to sign in to check if email confirmation is needed
         const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
-          email: signupData.email,
+          email: normalizedEmail,
           password: signupData.password
         })
 
@@ -122,7 +140,10 @@ export default function AuthPage() {
           return
         } else if (signInError) {
           console.error('Sign in error after signup:', signInError)
-          throw signInError
+          // Don't throw error for email confirmation
+          if (!signInError.message.includes('Email not confirmed')) {
+            throw signInError
+          }
         }
 
         // If sign in successful, create partner profile
@@ -130,8 +151,8 @@ export default function AuthPage() {
           .from('partners')
           .insert({
             user_id: authData.user.id,
-            email: signupData.email,
-            email_contact: signupData.email,
+            email: normalizedEmail,
+            email_contact: normalizedEmail,
             company_name: signupData.companyName,
             full_name: signupData.fullName,
             phone_primary: signupData.phone,
@@ -161,7 +182,10 @@ export default function AuthPage() {
       }
     } catch (error: any) {
       console.error('Signup error:', error)
-      setError(error.message || "Une erreur s'est produite lors de l'inscription")
+      // Don't show error for email confirmation
+      if (error.message && !error.message.includes('Email not confirmed')) {
+        setError(error.message || "Une erreur s'est produite lors de l'inscription")
+      }
     } finally {
       setLoading(false)
     }
@@ -207,6 +231,11 @@ export default function AuthPage() {
                   {error && (
                     <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm">
                       {error}
+                    </div>
+                  )}
+                  {successMessage && (
+                    <div className="p-3 bg-green-50 text-green-600 rounded-lg text-sm border border-green-200">
+                      {successMessage}
                     </div>
                   )}
                   

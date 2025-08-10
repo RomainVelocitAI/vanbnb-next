@@ -41,6 +41,11 @@ export async function updateSession(request: NextRequest) {
   const protectedRoutes = ['/dashboard', '/profile', '/bookings']
   const authRoutes = ['/login', '/register']
   
+  // Skip middleware for auth callback
+  if (request.nextUrl.pathname === '/auth/callback') {
+    return supabaseResponse
+  }
+  
   const isProtectedRoute = protectedRoutes.some(route => 
     request.nextUrl.pathname.startsWith(route)
   )
