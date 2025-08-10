@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "clean:test-user": "node scripts/clean-test-user.js",
+    "test:signup": "npm run clean:test-user && echo 'Utilisateur test supprimé. Vous pouvez maintenant tester l inscription.'",
     "security:check": "node scripts/security-check.js",
     "lighthouse": "npx lighthouse http://localhost:3000 --config-path=./lighthouse.config.js",
     "test:security": "npm run security:check",
