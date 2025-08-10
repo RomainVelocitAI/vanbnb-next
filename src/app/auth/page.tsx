@@ -98,18 +98,25 @@ export default function AuthPage() {
         const { error: profileError } = await supabase
           .from('partners')
           .insert({
-            id: authData.user.id,
+            user_id: authData.user.id,
             email: signupData.email,
+            email_contact: signupData.email,
             company_name: signupData.companyName,
             full_name: signupData.fullName,
             phone_primary: signupData.phone,
-            // Combine address fields into a single JSON field
+            // Add individual address fields
+            address_street: signupData.addressStreet,
+            address_city: signupData.addressCity,
+            address_postal_code: signupData.addressPostalCode,
+            address_country: signupData.addressCountry,
+            // Also store as JSON for future use
             address: {
               street: signupData.addressStreet,
               city: signupData.addressCity,
               postal_code: signupData.addressPostalCode,
               country: signupData.addressCountry
             },
+            siret: 'PENDING', // Temporaire, sera mis à jour plus tard
             status: 'pending_verification'
           })
 
